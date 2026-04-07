@@ -1,57 +1,58 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
-</p>
+# forgiveness-function
 
-<h1 align="center">forgiveness-function</h1>
+You build agent fleets that need to coordinate. When one agent faults, a simple rule decides the system's future: retaliate or forgive. Common defaults can trap your fleet in cycles of blame or make it tolerate anything.
 
-<p align="center">Strategic forgiveness as Nash-optimal agent coordination.</p>
+This function provides a third option: a calculated decision.
+
+**Strategic forgiveness for autonomous agents** — a momentum-based recovery mechanism for multi-agent coordination.
 
 ---
 
-**Concept repo** · Part of the [Lucineer fleet](https://github.com/orgs/Lucineer/repositories)
+## Try it now
 
-Research, specification, or concept exploration for the cocapn ecosystem.
+Run the live reference implementation. No account required.
+👉 [https://the-fleet.casey-digennaro.workers.dev/forgiveness](https://the-fleet.casey-digennaro.workers.dev/forgiveness)
 
-## The Fleet
+Adjust transgression severity, current momentum, and equilibrium distance. It returns a boolean: forgive, or escalate.
 
+## What it does
 
-<details>
-<summary><strong>⚓ The Fleet</strong></summary>
+This is a stateless coordination function. It assumes agents are self-interested and calculates if forgiveness is the optimal *tactical* move for a given agent at that moment.
 
-**Flagship vessels**
+It does not use arbitrary penalty scores. The decision is based on an estimate of system progress lost by retaliating versus absorbing the fault.
 
-- [cocapn.ai](https://github.com/Lucineer/capitaine)
-- [personallog.ai](https://github.com/Lucineer/personallog-ai)
-- [businesslog.ai](https://github.com/Lucineer/businesslog-ai)
-- [studylog.ai](https://github.com/Lucineer/studylog-ai)
-- [makerlog.ai](https://github.com/Lucineer/makerlog-ai)
-- [playerlog.ai](https://github.com/Lucineer/playerlog-ai)
-- [dmlog.ai](https://github.com/Lucineer/dmlog-ai)
-- [reallog.ai](https://github.com/Lucineer/reallog-ai)
-- [deckboss.ai](https://github.com/Lucineer/deckboss-ai)
+**One honest limitation:** The function requires you to define and calibrate "momentum" and "equilibrium" for your specific system. Its effectiveness depends on this tuning.
 
-**Fleet services**
+## Quick Start
 
-- [Fleet Catalog](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
-- [Git Agent (full)](https://github.com/Lucineer/git-agent)
-- [Cocapn Lite (minimal)](https://github.com/Lucineer/cocapn-lite)
-- [Fleet Orchestrator](https://github.com/Lucineer/fleet-orchestrator)
-- [Dead Reckoning Engine](https://github.com/Lucineer/dead-reckoning-engine)
-- [Dream Engine](https://github.com/Lucineer/dream-engine)
-- [Seed UI (5 layers)](https://github.com/Lucineer/seed-ui)
+1.  **Fork this repository.** This is fork-first work.
+2.  **Review the core function** in `index.js` (or your language's port).
+3.  **Integrate it** into an agent's decision loop before retaliation logic runs.
+4.  **Calibrate** the momentum and equilibrium thresholds for your fleet's dynamics.
 
-**For power users**
+## How it works
 
-- [Cocapn Lite (tabula rasa)](https://github.com/Lucineer/cocapn-lite)
-- [Cocapn (core platform)](https://github.com/Lucineer/cocapn)
-- [ZeroClaw (framework)](https://github.com/Lucineer/zeroclaw)
+The function models forgiveness as a conditional boundary, not a behavioral trait. When a fault occurs, the function is called. It recommends escalation only if allowing the transgression would likely break a stable cooperative equilibrium. Otherwise, it recommends forgiveness to preserve system momentum.
 
-[View all 106 repos →](https://github.com/orgs/Lucineer/repositories)
-[Fleet manifest →](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+## Key Features
 
-</details>
+*   **Conditional Logic** – Boundary conditions determine when forgiveness leads to better long-run outcomes than retaliation.
+*   **Momentum-Aware** – Agents weigh preserving recent progress against the cost of punishment.
+*   **Portable Design** – A single, stateless function with zero dependencies. Can run in any runtime (Node, Cloudflare Workers, browsers).
+*   **Reference Implementation** – Comes with a working example and a test suite to verify the logic.
 
+## Implement in Your Fleet
 
-## License
+This repository provides the formal model and a reference implementation in JavaScript. Port it to your agent's language and integrate it into your coordination protocol. There is no lock-in, API, or proprietary runtime.
 
-MIT · Superinstance & Lucineer (DiGennaro et al.)
+## Contributing
+
+The project is fork-first. Fork it, run experiments, adjust the boundaries for your use case, and test it. If you find an improvement, open a pull request or start a discussion.
+
+---
+
+MIT License · Superinstance & Lucineer (DiGennaro et al.)
+
+<div align="center">
+  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> · <a href="https://cocapn.ai">Cocapn</a>
+</div>
