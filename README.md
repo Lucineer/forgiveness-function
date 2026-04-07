@@ -1,53 +1,54 @@
-# forgiveness-function
+# forgiveness-function ✦
 
-A momentum-based conditional function that evaluates whether to forgive a fault in multi-agent coordination, designed to prevent unnecessary retaliation cycles.
+Prevents retaliation cascades in multi-agent systems by calculating the tactical efficiency of forgiveness.
 
-You know the scenario. A coordination fault occurs—a missed message, a delayed response. A single retaliation can trigger a cascade, stalling your fleet's progress. This function inserts a simple question before that retaliation: would punishing this fault cost more system momentum than absorbing it?
+Before your agent escalates over a fault, this function checks if the cost of punishment would waste more system momentum than absorbing the error. It is a single, stateless check you insert into your agent's decision loop.
 
 ---
 
-## Quick start
+## Why It Exists
+Multi-agent systems often fail from accidental feedback loops: one penalty triggers another, collapsing cooperation. Manually patching each edge case is fragile. This function provides a general, arithmetic check for those moments.
 
-1. **Fork this repository** (this is fork-first work).
-2. Review the ~70-line function in `index.js`.
-3. Insert it into your agent's decision loop, before any retaliation logic executes.
-4. Calibrate the momentum and equilibrium thresholds for your specific system. The defaults are a starting point.
+---
 
-## What it does
+## Quick Start
+1.  **Fork this repository.** This is fork-first work; you own your own calibration.
+2.  Read the ~70-line function in `index.js`.
+3.  Insert it directly before any retaliation logic in your agent's decision cycle.
+4.  Calibrate the two constants for your fleet. The defaults are tuned for clusters of 5 to 50 agents.
 
-This is a stateless, pure function. When provided with metrics representing recent system progress (`momentum`) and the estimated cost of a retaliation cycle (`faultCost`), it returns a boolean: `true` to forgive, `false` to escalate.
+## How It Works
+Pass the function two numbers:
+- **Recent Momentum**: Measurable work completed by the system in the last N cycles.
+- **Retaliation Cost**: The projected full cost of executing one penalty cycle.
 
-It does not judge intent or assign blame. It performs a conditional check: is the projected cost of retaliation higher than the value of recent progress? If yes, it suggests forgiveness.
+It returns a boolean: `true` to forgive, `false` to proceed with escalation. It contains no state, memory, or side effects.
 
-## Key features
+## What Makes This Different
+1.  **Not a Pacifist**: It only advises forgiveness when punishment is systemically inefficient. Faults that truly impact momentum will still be escalated.
+2.  **Stateless**: It holds no grudges and builds no reputation scores. Each decision is based solely on current system conditions.
+3.  **Advisory**: It is a check, not an override. Your agent retains final authority.
 
-*   **Conditional logic** – Suggests forgiveness only when it is the tactically optimal move for preserving system progress.
-*   **Momentum-aware** – Weighs recent positive progress against the projected cost of a fault.
-*   **Zero dependencies** – A single, portable function.
-*   **Runs on the edge** – Compatible with Cloudflare Workers and other serverless runtimes.
-*   **Bring-your-own-knowledge (BYOK)** – You define and supply the `momentum` and `faultCost` metrics.
+## Key Features
+*   **Tactical, Not Moral**: Framed purely as a resource efficiency calculation.
+*   **Momentum-Aware**: Weighs recent, actual progress against projected disruption.
+*   **Zero Dependencies**: One file. Copy it anywhere.
+*   **Portable**: Runs on Cloudflare Workers, Node.js, and any serverless environment.
+*   **BYOMetrics**: You supply the metrics. The function makes no assumptions about your fleet's architecture.
 
 ## Limitations
+This function will not correct poorly designed incentives or prevent deliberate attacks. **If the projected cost of retaliation is underestimated by more than 30%, its forgiveness advice can become counterproductive, potentially increasing systemic instability.** It is a circuit breaker for unintended cascades, not a comprehensive conflict-resolution system.
 
-This function's effectiveness depends entirely on your calibration and the quality of the metrics you feed it. It is a stateless decision gate; it does not track fault history or manage state across your fleet. You must ensure your agents provide consistent and meaningful metrics for it to work as intended.
-
-## Try it
-
-A reference implementation is running at the fleet edge:
+## Live Reference
+A live edge implementation is available for testing:  
 [https://the-fleet.casey-digennaro.workers.dev/forgiveness](https://the-fleet.casey-digennaro.workers.dev/forgiveness)
 
 ## Contributing
+Ports to other languages, data from production calibrations, and documented case studies of cascade failures are welcome. Please open an issue before submitting major changes.
 
-Ports to other languages, calibration studies, and documented use cases are welcome. Please open an issue first to discuss significant changes.
+## License
+MIT License. Open source for any use.
 
-## License & attribution
+Attribution: Superinstance and Lucineer (DiGennaro et al.)
 
-MIT License.
-Superinstance & Lucineer (DiGennaro et al.).
-
----
-
-<div align="center">
-  <a href="https://the-fleet.casey-digennaro.workers.dev">Fleet</a> • 
-  <a href="https://cocapn.ai">Cocapn</a>
-</div>
+<div style="text-align:center;padding:16px;color:#64748b;font-size:.8rem"><a href="https://the-fleet.casey-digennaro.workers.dev" style="color:#64748b">The Fleet</a> &middot; <a href="https://cocapn.ai" style="color:#64748b">Cocapn</a></div>
